@@ -1,0 +1,222 @@
+﻿Merge remote-tracking branch 'refs/remotes/ftctechnh/master'
+
+Conflicts:
+	FtcRobotController/FtcRobotController.iml
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+Jacob 11-25
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   FtcRobotController/FtcRobotController.iml
+#	modified:   FtcRobotController/libs/FtcCommon-release.aar
+#	modified:   FtcRobotController/libs/Hardware-release.aar
+#	modified:   FtcRobotController/libs/ModernRobotics-release.aar
+#	modified:   FtcRobotController/libs/RobotCore-release.aar
+#	modified:   FtcRobotController/src/main/AndroidManifest.xml
+#	deleted:    FtcRobotController/src/main/assets/robot_config.xml
+#	deleted:    FtcRobotController/src/main/assets/tests/test.xml
+#	deleted:    FtcRobotController/src/main/assets/tests/test1.xml
+#	deleted:    FtcRobotController/src/main/assets/tests/test4.xml
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/FtcOpModeRegister.java
+#	new file:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/HTRGBExample.java
+#	deleted:    FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/K9AutoTime.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/K9IrSeeker.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/K9Line.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/K9TankDrive.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/LinearI2cAddressChange.java
+#	new file:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/MRGyroTest.java
+#	new file:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/MRRGBExample.java
+#	new file:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/MatrixControllerDemo.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/MatrixK9TeleOp.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/NxtTeleOp.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotAuto.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotAutoSensors.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotDriveTouch.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotHardware.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotHardwareSensors.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotIrEvent.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotIrSeek.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotManual.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotManual1.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotManualSensors.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotOdsDetectEvent.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotOdsFollowEvent.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotSquare.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotTelemetry.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotTelemetrySensors.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/PushBotTouchEvent.java
+#	deleted:    FtcRobotController/src/main/res/drawable-hdpi/button_shape.xml
+#	deleted:    FtcRobotController/src/main/res/drawable-xhdpi/icon_battery0.png
+#	deleted:    FtcRobotController/src/main/res/drawable-xhdpi/icon_battery100.png
+#	deleted:    FtcRobotController/src/main/res/drawable-xhdpi/icon_battery25.png
+#	deleted:    FtcRobotController/src/main/res/drawable-xhdpi/icon_battery50.png
+#	deleted:    FtcRobotController/src/main/res/drawable-xhdpi/icon_battery75.png
+#	deleted:    FtcRobotController/src/main/res/layout/spinner_textview.xml
+#	deleted:    FtcRobotController/src/main/res/menu/menu_load.xml
+#	modified:   README.md
+#	modified:   doc/apk/FtcDriverStation-release.apk
+#	modified:   doc/apk/FtcRobotController-release.apk
+#	modified:   doc/javadoc/allclasses-frame.html
+#	modified:   doc/javadoc/allclasses-noframe.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/AboutActivity.Item.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/AboutActivity.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/CommandList.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/ConfigWifiDirectActivity.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/DbgLog.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/Device.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcEventLoop.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcEventLoopHandler.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcRobotControllerService.FtcRobotControllerBinder.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcRobotControllerService.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcRobotControllerSettingsActivity.SettingsFragment.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcRobotControllerSettingsActivity.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/FtcWifiChannelSelectorActivity.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/LaunchActivityConstantsList.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/Restarter.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/UpdateUI.Callback.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/UpdateUI.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/ViewLogsActivity.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/package-frame.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/package-summary.html
+#	modified:   doc/javadoc/com/qualcomm/ftccommon/package-tree.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/AdafruitI2cColorSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HardwareDeviceManager.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HardwareFactory.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtAccelerationSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtColorSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtCompassSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtDcMotorController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtGyroSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtIrSeekerSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtLightSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtServoController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtTouchSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtTouchSensorMultiplexer.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/HiTechnicNxtUltrasonicSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/MatrixDcMotorController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/MatrixI2cTransaction.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/MatrixMasterController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/MatrixServoController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsAnalogOpticalDistanceSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsDigitalTouchSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsI2cColorSensor.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsI2cIrSeekerSensorV3.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsUsbDcMotorController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsUsbDevice.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsUsbDeviceInterfaceModule.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsUsbLegacyModule.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ModernRoboticsUsbServoController.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ReadWriteRunnableBlocking.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ReadWriteRunnableSegment.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/ReadWriteRunnableStandard.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/package-frame.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/package-summary.html
+#	deleted:    doc/javadoc/com/qualcomm/hardware/package-tree.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/EventLoop.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/EventLoopManager.EventLoopMonitor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/EventLoopManager.State.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/EventLoopManager.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/SyncdDevice.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/LinearOpMode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/OpMode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/OpModeManager.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/OpModeRegister.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/package-frame.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/package-summary.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/opmode/package-tree.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/package-frame.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/package-summary.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/eventloop/package-tree.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/exception/RobotCoreException.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/exception/RobotCoreNonResponsiveException.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/exception/package-frame.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/exception/package-summary.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/exception/package-tree.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/AccelerationSensor.Acceleration.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/AccelerationSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/AnalogInput.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/AnalogInputController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/AnalogOutput.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/AnalogOutputController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/ColorSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/CompassSensor.CompassMode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/CompassSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DcMotor.Direction.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DcMotor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DcMotorController.DeviceMode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DcMotorController.RunMode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DcMotorController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DeviceInterfaceModule.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DeviceManager.DeviceType.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DeviceManager.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DigitalChannel.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DigitalChannelController.Mode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/DigitalChannelController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/Gamepad.GamepadCallback.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/Gamepad.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/GyroSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/HardwareDevice.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/HardwareMap.DeviceMapping.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/HardwareMap.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/I2cController.I2cPortReadyCallback.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/I2cController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/I2cDevice.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/I2cDeviceReader.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/IrSeekerSensor.IrSeekerIndividualSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/IrSeekerSensor.Mode.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/IrSeekerSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/LED.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/LegacyModule.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/LightSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/OpticalDistanceSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/PWMOutput.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/PWMOutputController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/Servo.Direction.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/Servo.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/ServoController.PwmStatus.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/ServoController.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/TouchSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/TouchSensorMultiplexer.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/UltrasonicSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/VoltageSensor.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/package-frame.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/package-summary.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/hardware/package-tree.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/DifferentialControlLoopCoefficients.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/ElapsedTime.Resolution.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/ElapsedTime.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/Range.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/SerialNumber.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/TypeConversion.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/package-frame.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/package-summary.html
+#	modified:   doc/javadoc/com/qualcomm/robotcore/util/package-tree.html
+#	modified:   doc/javadoc/constant-values.html
+#	modified:   doc/javadoc/deprecated-list.html
+#	modified:   doc/javadoc/help-doc.html
+#	modified:   doc/javadoc/index-all.html
+#	modified:   doc/javadoc/index.html
+#	modified:   doc/javadoc/overview-frame.html
+#	modified:   doc/javadoc/overview-summary.html
+#	modified:   doc/javadoc/overview-tree.html
+#	modified:   doc/javadoc/package-list
+#	new file:   doc/javadoc/resources/background.gif
+#	new file:   doc/javadoc/resources/tab.gif
+#	new file:   doc/javadoc/resources/titlebar.gif
+#	new file:   doc/javadoc/resources/titlebar_end.gif
+#	deleted:    doc/javadoc/script.js
+#	modified:   doc/javadoc/serialized-form.html
+#	modified:   doc/javadoc/stylesheet.css
+#
+
