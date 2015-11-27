@@ -1,3 +1,33 @@
+/* Copyright (c) 2014 Qualcomm Technologies Inc
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted (subject to the limitations in the disclaimer below) provided that
+the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list
+of conditions and the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice, this
+list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+Neither the name of Qualcomm Technologies Inc nor the names of its contributors
+may be used to endorse or promote products derived from this software without
+specific prior written permission.
+
+NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 
@@ -9,10 +39,23 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import java.lang.*;
+
+import android.app.Fragment;
+import android.content.pm.PackageManager;
+import android.content.Context;
+import android.*;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+
 /**
- * Created by MESON on 10/9/2015.
+ * TeleOp Mode
+ * <p>
+ * Enables control of the robot via the gamepad
  */
-public class GithubTest extends OpMode{
+public class GyroTest extends OpMode implements SensorEventListener {
 
     /*
      * Note: the configuration of the servos is such that
@@ -20,20 +63,15 @@ public class GithubTest extends OpMode{
      * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
      */
     // TETRIX VALUES.
+    private SensorManager mSensorManager;
+    private Sensor mGyro;
+    private final Context context;
 
-
-    DcMotor motorRight;
-    DcMotor motorLeft;
-    OpticalDistanceSensor v_sensor_ods;
-    //private SensorManager mSensorManager;
-    //private Sensor mGyro;
-    //private final Context context;
     /**
      * Constructor
      */
-
-    public GithubTest(){
-
+    public GyroTest(Context context){
+        this.context = context;
     }
 
     /*
@@ -59,17 +97,10 @@ public class GithubTest extends OpMode{
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
-        motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
-        motorLeft.setDirection(DcMotor.Direction.REVERSE);
-        v_sensor_ods = hardwareMap.opticalDistanceSensor.get("sensor_ods");
-
-        //mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        //mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
-
-
-    /*private static final float NS2S = 1.0f / 1000000000.0f;
+    private static final float NS2S = 1.0f / 1000000000.0f;
     private final float[] deltaRotationVector = new float[4];
     private float timestamp;
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -86,7 +117,7 @@ public class GithubTest extends OpMode{
             float axisZ = event.values[2];
 
             // Calculate the angular speed of the sample
-            float omegaMagnitude = (float)(Math.sqrt((float)((float)(axisX*axisX) + (float)(axisY*axisY) + (float)(axisZ*axisZ))));
+            float omegaMagnitude = (float) (Math.sqrt((float) ((float) (axisX * axisX) + (float) (axisY * axisY) + (float) (axisZ * axisZ))));
 
             // Normalize the rotation vector if it's big enough to get the axis
             // (that is, EPSILON should represent your maximum allowable margin of error)
@@ -101,8 +132,8 @@ public class GithubTest extends OpMode{
             // We will convert this axis-angle representation of the delta rotation
             // into a quaternion before turning it into the rotation matrix.
             float thetaOverTwo = omegaMagnitude * dT / 2.0f;
-            float sinThetaOverTwo = (float)Math.sin(thetaOverTwo);
-            float cosThetaOverTwo = (float)Math.cos(thetaOverTwo);
+            float sinThetaOverTwo = (float) Math.sin(thetaOverTwo);
+            float cosThetaOverTwo = (float) Math.cos(thetaOverTwo);
             deltaRotationVector[0] = sinThetaOverTwo * axisX;
             deltaRotationVector[1] = sinThetaOverTwo * axisY;
             deltaRotationVector[2] = sinThetaOverTwo * axisZ;
@@ -111,11 +142,7 @@ public class GithubTest extends OpMode{
         timestamp = event.timestamp;
         float[] deltaRotationMatrix = new float[9];
         SensorManager.getRotationMatrixFromVector(deltaRotationMatrix, deltaRotationVector);
-        // User code should concatenate the delta rotation we computed with the current rotation
-        // in order to get the updated rotation.
-
-    }*/
-
+    }
     /*
      * This method will be called repeatedly in a loop
      *
@@ -123,48 +150,12 @@ public class GithubTest extends OpMode{
      */
     @Override
     public void loop() {
-
-		/*
-		 * Gamepad 1
-		 *
-		 * Gamepad 1 controls the motors via the left stick, and it controls the
-		 * wrist/claw via the a,b, x, y buttons
-		 */
-
-        // tank drive
-        // note that if y equal -1 then joystick is pushed all of the way forward.
-        float left = -gamepad1.left_stick_y;
-        float right = -gamepad1.right_stick_y;
-
-        // clip the right/left values so that the values never exceed +/- 1
-        right = Range.clip(right, -1, 1);
-        left = Range.clip(left, -1, 1);
-
-        // scale the joystick value to make it easier to control
-        // the robot more precisely at slower speeds.
-        right = (float)scaleInput(right);
-        left = (float)scaleInput(left);
-        //double distance = v_sensor_ods.getLightDetected();
-        // write the values to the motors
-        motorRight.setPower(right);
-        motorLeft.setPower(left);
-
-        // update the position of the arm.
+            telemetry.addData("Gyro", "Gyro: " + String.format("%.2f", deltaRotationVector[0]));
+            telemetry.addData("Gyro", "Gyro: " + String.format("%.2f", deltaRotationVector[1]));
+            telemetry.addData("Gyro", "Gyro: " + String.format("%.2f", deltaRotationVector[2]));
+            telemetry.addData("Gyro", "Gyro: " + String.format("%.2f", deltaRotationVector[3]));
 
 
-		/*
-		 * Send telemetry data back to driver station. Note that if we are using
-		 * a legacy NXT-compatible motor controller, then the getPower() method
-		 * will return a null value. The legacy NXT-compatible motor controllers
-		 * are currently write only.
-		 */
-
-        telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
-        telemetry.addData("Left Joystick", "left joy: " + String.format("%.2f", gamepad1.left_stick_y));
-        telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
-        telemetry.addData("Right Joystick", "right joy: " + String.format("%.2f", gamepad1.right_stick_y));
-        //telemetry.addData("Gyro", "Gyro: " + String.format("%.2f", deltaRotationVector[0]));
     }
 
     /*
@@ -182,34 +173,6 @@ public class GithubTest extends OpMode{
      * scaled value is less than linear.  This is to make it easier to drive
      * the robot more precisely at slower speeds.
      */
-    double scaleInput(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
 
-        // get the corresponding index for the scaleInput array.
-        int index = (int) (dVal * 16.0);
-
-        // index should be positive.
-        if (index < 0) {
-            index = -index;
-        }
-
-        // index cannot exceed size of array minus 1.
-        if (index > 16) {
-            index = 16;
-        }
-
-        // get value from the array.
-        double dScale = 0.0;
-        if (dVal < 0) {
-            dScale = -scaleArray[index];
-        } else {
-            dScale = scaleArray[index];
-        }
-
-        // return scaled value.
-        return dScale;
-    }
 
 }
-
