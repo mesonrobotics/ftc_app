@@ -1,0 +1,17 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   FtcRobotController/FtcRobotController.iml
+#	modified:   FtcRobotController/src/main/AndroidManifest.xml
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/FtcOpModeRegister.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/GithubTest.java
+#	new file:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/GyroTest.java
+#	new file:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/K9AutoTime.java
+#	modified:   FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/K9IrSeeker.java
+#	modified:   ftc_app.iml
+#
+
