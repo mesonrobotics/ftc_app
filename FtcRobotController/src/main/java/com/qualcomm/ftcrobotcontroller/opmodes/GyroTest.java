@@ -29,8 +29,17 @@ public class GyroTest extends OpMode implements SensorEventListener {
     private float pitch = 0.0f;        // value in radians
     private float roll = 0.0f;         // value in radians
 
+    float m_Norm_Gravity;
+    float m_Norm_MagField;
     private float[] mGravity;       // latest sensor values
     private float[] mGeomagnetic;   // latest sensor values
+
+    float[] m_NormEastVector;       // normalised cross product of raw gravity vector with magnetic field values, points east
+    float[] m_NormNorthVector;      // Normalised vector pointing to magnetic north
+    boolean m_OrientationOK;        // set true if m_azimuth_radians and m_pitch_radians have successfully been calculated following a call to onSensorChanged(...)
+    float m_azimuth_radians;        // angle of the device from magnetic north
+    float m_pitch_radians;          // tilt angle of the device from the horizontal.  m_pitch_radians = 0 if the device if flat, m_pitch_radians = Math.PI/2 means the device is upright.
+    float m_pitch_axis_radians;
 
     /*
     * Constructor
@@ -77,9 +86,16 @@ public class GyroTest extends OpMode implements SensorEventListener {
 //        telemetry.addData("2 note1", "values below are in degrees" );
 //        telemetry.addData("3 note2", "azimuth relates to magnetic north" );
 //        telemetry.addData("4 note3", " " );
-        telemetry.addData("azimuth", Math.round(Math.toDegrees(azimuth)));
-        telemetry.addData("pitch", Math.round(Math.toDegrees(pitch)));
-        telemetry.addData("roll", Math.round(Math.toDegrees(roll)));
+        telemetry.addData("azimuth", Math.round(Math.toDegrees(m_azimuth_radians)));
+        telemetry.addData("pitch", Math.round(Math.toDegrees(m_pitch_radians)));
+        telemetry.addData("azimuth", m_azimuth_radians);
+        telemetry.addData("pitch", m_pitch_radians);
+        telemetry.addData("Mag", mGeomagnetic[0]);
+        telemetry.addData("Mag", mGeomagnetic[1]);
+        telemetry.addData("Mag", mGeomagnetic[2]);
+        telemetry.addData("Grav", mGravity[0]);
+        telemetry.addData("Grav", mGravity[1]);
+        telemetry.addData("Grav", mGravity[2]);
     }
 
     /*
@@ -100,11 +116,44 @@ public class GyroTest extends OpMode implements SensorEventListener {
         // only one value will have changed when this method called, we assume we can still use the other value.
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             mGravity = event.values;
+            m_Norm_Gravity = (float)Math.sqrt(mGravity[0]*mGravity[0] + mGravity[1]*mGravity[1] + mGravity[2]*mGravity[2]);
+            for(int i=0; i < mGravity.length; i++) mGravity[i] /= m_Norm_Gravity;
         }
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             mGeomagnetic = event.values;
+            m_Norm_MagField = (float)Math.sqrt(mGeomagnetic[0]*mGeomagnetic[0] + mGeomagnetic[1]*mGeomagnetic[1] + mGeomagnetic[2]*mGeomagnetic[2]);
+            for(int i=0; i < mGeomagnetic.length; i++) mGeomagnetic[i] /= m_Norm_MagField;
         }
         if (mGravity != null && mGeomagnetic != null) {  //make sure we have both before calling getRotationMatrix
+            float East_x = mGeomagnetic[1]*mGravity[2] - mGeomagnetic[2]*mGravity[1];
+            float East_y = mGeomagnetic[2]*mGravity[0] - mGeomagnetic[0]*mGravity[2];
+            float East_z = mGeomagnetic[0]*mGravity[1] - mGeomagnetic[1]*mGravity[0];
+            float norm_East = (float)Math.sqrt(East_x * East_x + East_y * East_y + East_z * East_z);
+            if (m_Norm_Gravity * m_Norm_MagField * norm_East < 0.1f) {  // Typical values are  > 100.
+                m_OrientationOK = false; // device is close to free fall (or in space?), or close to magnetic north pole.
+            } else {
+                m_NormEastVector[0] = East_x / norm_East; m_NormEastVector[1] = East_y / norm_East; m_NormEastVector[2] = East_z / norm_East;
+
+                // next calculate the horizontal vector that points due north
+                float M_dot_G = (mGravity[0] *mGeomagnetic[0] + mGravity[1]*mGeomagnetic[1] + mGravity[2]*mGeomagnetic[2]);
+                float North_x = mGeomagnetic[0] - mGravity[0] * M_dot_G;
+                float North_y = mGeomagnetic[1] - mGravity[1] * M_dot_G;
+                float North_z = mGeomagnetic[2] - mGravity[2] * M_dot_G;
+                float norm_North = (float)Math.sqrt(North_x * North_x + North_y * North_y + North_z * North_z);
+                m_NormNorthVector[0] = North_x / norm_North; m_NormNorthVector[1] = North_y / norm_North; m_NormNorthVector[2] = North_z / norm_North;
+
+                // take account of screen rotation away from its natural rotation
+
+                // calculate all the required angles from the rotation matrix
+                // NB: see http://math.stackexchange.com/questions/381649/whats-the-best-3d-angular-co-ordinate-system-for-working-with-smartfone-apps
+                float sin = m_NormEastVector[1] -  m_NormNorthVector[0], cos = m_NormEastVector[0] +  m_NormNorthVector[1];
+                m_azimuth_radians = (float) (sin != 0 && cos != 0 ? Math.atan2(sin, cos) : 0);
+                m_pitch_radians = (float) Math.acos(mGravity[2]);
+                sin = -m_NormEastVector[1] -  m_NormNorthVector[0]; cos = m_NormEastVector[0] -  m_NormNorthVector[1];
+                float aximuth_plus_two_pitch_axis_radians = (float)(sin != 0 && cos != 0 ? Math.atan2(sin, cos) : 0);
+                m_pitch_axis_radians = (float)(aximuth_plus_two_pitch_axis_radians - m_azimuth_radians) / 2;
+                m_OrientationOK = true;
+            }
             float R[] = new float[9];
             float I[] = new float[9];
             boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);

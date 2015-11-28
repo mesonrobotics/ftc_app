@@ -1,17 +1,23 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
-
-import com.qualcomm.ftccommon.DbgLog;
-import com.qualcomm.ftccommon.*;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 /**
  * Created by MESON on 10/9/2015.
  */
-public class FloVal extends OpMode{
+public class FloVal extends OpMode implements SensorEventListener{
 
     /*
      * Note: the configuration of the servos is such that
@@ -27,6 +33,19 @@ public class FloVal extends OpMode{
     Servo   autoArm;
     boolean in = false;
     float auto = 0.0f;
+
+    private String startDate;
+    private SensorManager mSensorManager;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
+
+    // orientation values
+    private float azimuth = 0.0f;      // value in radians
+    private float pitch = 0.0f;        // value in radians
+    private float roll = 0.0f;         // value in radians
+
+    private float[] mGravity;       // latest sensor values
+    private float[] mGeomagnetic;   // latest sensor values
 
     //private SensorManager mSensorManager;
     //private Sensor mGyro;
@@ -62,6 +81,14 @@ public class FloVal extends OpMode{
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
+        mSensorManager = (SensorManager) hardwareMap.appContext.getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        azimuth = 0.0f;      // value in radians
+        pitch = 0.0f;        // value in radians
+        roll = 0.0f;
+
         motorRight = hardwareMap.dcMotor.get("motor_2");
         motorLeft = hardwareMap.dcMotor.get("motor_1");
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -74,7 +101,14 @@ public class FloVal extends OpMode{
         //mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
+    @Override
+    public void start() {
+        startDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
 
+        // delay value is SENSOR_DELAY_UI which is ok for telemetry, maybe not for actual robot use
+        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+    }
 
 
     /*
@@ -116,8 +150,8 @@ public class FloVal extends OpMode{
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-        right = (float)scaleInput(right);
-        left = (float)scaleInput(left);
+       // right = (float)scaleInput(right);
+        //left = (float)scaleInput(left);
         //double distance = v_sensor_ods.getLightDetected();
         // write the values to the motors
         motorRight.setPower(right);
@@ -135,11 +169,14 @@ public class FloVal extends OpMode{
 		 * are currently write only.
 		 */
 
-        telemetry.addData("Text", "*** Robot Data***");
+        /*telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("Left Joystick", "left joy: " + String.format("%.2f", gamepad1.left_stick_y));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("Right Joystick", "right joy: " + String.format("%.2f", gamepad1.right_stick_y));
+        */telemetry.addData("azimuth", Math.round(Math.toDegrees(azimuth)));
+        telemetry.addData("pitch", Math.round(Math.toDegrees(pitch)));
+        telemetry.addData("roll", Math.round(Math.toDegrees(roll)));
     }
 
     /*
@@ -149,42 +186,34 @@ public class FloVal extends OpMode{
      */
     @Override
     public void stop() {
-
+        mSensorManager.unregisterListener(this);
     }
 
-    /*
-     * This method scales the joystick input so for low joystick values, the
-     * scaled value is less than linear.  This is to make it easier to drive
-     * the robot more precisely at slower speeds.
-     */
-    double scaleInput(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
-
-        // get the corresponding index for the scaleInput array.
-        int index = (int) (dVal * 16.0);
-
-        // index should be positive.
-        if (index < 0) {
-            index = -index;
-        }
-
-        // index cannot exceed size of array minus 1.
-        if (index > 16) {
-            index = 16;
-        }
-
-        // get value from the array.
-        double dScale = 0.0;
-        if (dVal < 0) {
-            dScale = -scaleArray[index];
-        } else {
-            dScale = scaleArray[index];
-        }
-
-        // return scaled value.
-        return dScale;
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // not sure if needed, placeholder just in case
     }
 
+    public void onSensorChanged(SensorEvent event) {
+        // we need both sensor values to calculate orientation
+        // only one value will have changed when this method called, we assume we can still use the other value.
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mGravity = event.values;
+        }
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            mGeomagnetic = event.values;
+        }
+        if (mGravity != null && mGeomagnetic != null) {  //make sure we have both before calling getRotationMatrix
+            float R[] = new float[9];
+            float I[] = new float[9];
+            boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
+            if (success) {
+                float orientation[] = new float[3];
+                SensorManager.getOrientation(R, orientation);
+                azimuth = orientation[0]; // orientation contains: azimuth, pitch and roll
+                pitch = orientation[1];
+                roll = orientation[2];
+            }
+        }
+    }
 }
 
