@@ -137,6 +137,14 @@ public class FloVal extends OpMode {
         else if(gamepad2.right_bumper){
             auto = 0.0f;
         }
+        if(gamepad1.right_bumper){
+            left = -0.9f;
+            right = 0.9f;
+        }
+        else{
+            left = -gamepad1.left_stick_y;
+            right = -gamepad1.right_stick_y;
+        }
 
         if(gamepad1.a){
             in = !in;
