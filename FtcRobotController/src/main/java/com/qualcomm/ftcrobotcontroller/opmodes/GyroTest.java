@@ -6,7 +6,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.qualcomm.hardware.HiTechnicNxtCompassSensor;
+import com.qualcomm.hardware.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CompassSensor;
+import com.qualcomm.robotcore.hardware.LegacyModule;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,20 +18,29 @@ import java.util.Date;
 /**
  * An op mode that uses the geomagnetic and accelerometer values to calculate device
  * orientation and return those values in telemetry.
- * It makes use of getRotationMatrix() and getOrientation(), but does not use
- * remapCoordinateSystem() which one might want.
- * see: http://developer.android.com/reference/android/hardware/SensorManager.html#remapCoordinateSystem(float[], int, int, float[])
- */
-public class GyroTest extends OpMode implements SensorEventListener {
-    private String startDate;
-    private SensorManager mSensorManager;
-    private Sensor accelerometer;
-    private Sensor magnetometer;
+            * It makes use of getRotationMatrix() and getOrientation(), but does not use
+    * remapCoordinateSystem() which one might want.
+            * see: http://developer.android.com/reference/android/hardware/SensorManager.html#remapCoordinateSystem(float[], int, int, float[])
+            */
+    public class GyroTest extends OpMode implements SensorEventListener {
+        private String startDate;
+        private SensorManager mSensorManager;
+        private Sensor accelerometer;
+        private Sensor magnetometer;
+        private HiTechnicNxtCompassSensor com;
+    private final int COMPASS_PORT = 0;
+    private HiTechnicNxtUltrasonicSensor ultra;
+    private final int ULTRA_PORT = 5;
 
+
+
+    int sample = 30;
+    private float[] orient = new float[sample];
     // orientation values
     private float azimuth = 0.0f;      // value in radians
     private float pitch = 0.0f;        // value in radians
     private float roll = 0.0f;         // value in radians
+    int readRun = 0;
 
     float m_Norm_Gravity;
     float m_Norm_MagField;
@@ -61,6 +74,11 @@ public class GyroTest extends OpMode implements SensorEventListener {
         azimuth = 0.0f;      // value in radians
         pitch = 0.0f;        // value in radians
         roll = 0.0f;
+        com = (HiTechnicNxtCompassSensor)hardwareMap.compassSensor.get("this");
+        com.setMode(CompassSensor.CompassMode.MEASUREMENT_MODE);
+
+        ultra = (HiTechnicNxtUltrasonicSensor)hardwareMap.ultrasonicSensor.get("ultra");
+
     }
 
     /*
@@ -86,16 +104,20 @@ public class GyroTest extends OpMode implements SensorEventListener {
 //        telemetry.addData("2 note1", "values below are in degrees" );
 //        telemetry.addData("3 note2", "azimuth relates to magnetic north" );
 //        telemetry.addData("4 note3", " " );
-        telemetry.addData("azimuth", Math.round(Math.toDegrees(m_azimuth_radians)));
-        telemetry.addData("pitch", Math.round(Math.toDegrees(m_pitch_radians)));
-        telemetry.addData("azimuth", m_azimuth_radians);
+        telemetry.addData("azimuth", Math.round(Math.toDegrees(azimuth)));
+        telemetry.addData("roll", Math.round(Math.toDegrees(roll)));
+        telemetry.addData("pitch", Math.round(Math.toDegrees(pitch)));
+
+        telemetry.addData("val1", com.getDirection());
+        telemetry.addData("Ultra", ultra.getUltrasonicLevel());
+        /*telemetry.addData("azimuth", m_azimuth_radians);
         telemetry.addData("pitch", m_pitch_radians);
         telemetry.addData("Mag", mGeomagnetic[0]);
         telemetry.addData("Mag", mGeomagnetic[1]);
         telemetry.addData("Mag", mGeomagnetic[2]);
         telemetry.addData("Grav", mGravity[0]);
         telemetry.addData("Grav", mGravity[1]);
-        telemetry.addData("Grav", mGravity[2]);
+        telemetry.addData("Grav", mGravity[2]);*/
     }
 
     /*
@@ -125,7 +147,7 @@ public class GyroTest extends OpMode implements SensorEventListener {
             for(int i=0; i < mGeomagnetic.length; i++) mGeomagnetic[i] /= m_Norm_MagField;
         }
         if (mGravity != null && mGeomagnetic != null) {  //make sure we have both before calling getRotationMatrix
-            float East_x = mGeomagnetic[1]*mGravity[2] - mGeomagnetic[2]*mGravity[1];
+            /*float East_x = mGeomagnetic[1]*mGravity[2] - mGeomagnetic[2]*mGravity[1];
             float East_y = mGeomagnetic[2]*mGravity[0] - mGeomagnetic[0]*mGravity[2];
             float East_z = mGeomagnetic[0]*mGravity[1] - mGeomagnetic[1]*mGravity[0];
             float norm_East = (float)Math.sqrt(East_x * East_x + East_y * East_y + East_z * East_z);
@@ -153,7 +175,10 @@ public class GyroTest extends OpMode implements SensorEventListener {
                 float aximuth_plus_two_pitch_axis_radians = (float)(sin != 0 && cos != 0 ? Math.atan2(sin, cos) : 0);
                 m_pitch_axis_radians = (float)(aximuth_plus_two_pitch_axis_radians - m_azimuth_radians) / 2;
                 m_OrientationOK = true;
-            }
+            }*/
+            readRun++;
+            readRun = (readRun==sample) ? 0 : readRun;
+
             float R[] = new float[9];
             float I[] = new float[9];
             boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
@@ -163,6 +188,32 @@ public class GyroTest extends OpMode implements SensorEventListener {
                 azimuth = orientation[0]; // orientation contains: azimuth, pitch and roll
                 pitch = orientation[1];
                 roll = orientation[2];
+                orient[readRun] = azimuth;
+                double mean = 0;
+                for(int i=0; i<orient.length; i++){
+                    mean+= (orient[i]/orient.length);
+                }
+               // telemetry.addData("mean", mean);
+                //telemetry.addData("raw", orient[0]);
+
+                double variancesum = 0;
+                for(int i=0; i<orient.length; i++) {
+                    variancesum += (orient[i] - mean) * (orient[i] - mean);
+                }
+                double variance = variancesum/(double)(orient.length-1);
+                //telemetry.addData("varience", variance);
+                double SD = Math.sqrt(variance);
+
+                double finalsum = 0;
+                int run =0;
+                for(int i =0; i<orient.length; i++){
+                    if(Math.abs(orient[i]-mean)<Math.abs(SD)) {
+                        finalsum += (double)orient[i];
+                        run++;
+                    }
+                }
+                //telemetry.addData("az", run);
+                //azimuth = (float)finalsum/(float)run;
             }
         }
     }

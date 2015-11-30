@@ -60,7 +60,9 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register ("Test", GithubTest.class);
     manager.register ("Gyro", GyroTest.class);
     manager.register ("Camera", CameraOp.class);
-    manager.register ("FloValley", FloVal.class);
+    manager.register ("FloValleyTele", FloVal.class);
+    manager.register ("FloValleyAuto", FloValleyAuto.class);
+    manager.register ("CompassCali", CompCalibrate.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
