@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +32,10 @@ public class FloVal extends OpMode {
     DcMotor motorLeft;
     DcMotor intake;
     Servo   autoArm;
+    Servo climber1;
+    Servo climber2;
+    Servo bucketflap1;
+    Servo bucketflap2;
     boolean in = false;
     float auto = 0.0f;
 
@@ -95,6 +100,10 @@ public class FloVal extends OpMode {
         intake = hardwareMap.dcMotor.get("intake");
         intake.setDirection((DcMotor.Direction.REVERSE));
         autoArm = hardwareMap.servo.get("autoArm");
+        climber1=hardwareMap.servo.get("left climber");
+        climber2=hardwareMap.servo.get("right climber");
+        bucketflap1=hardwareMap.servo.get("left bucket flap");
+        bucketflap2=hardwareMap.servo.get("right bucket flap");
 
 
         //mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -130,7 +139,9 @@ public class FloVal extends OpMode {
         // note that if y equal -1 then joystick is pushed all of the way forward.
         float left = -gamepad1.left_stick_y;
         float right = -gamepad1.right_stick_y;
-
+        boolean climb1=gamepad1.dpad_left;
+        boolean climb2=gamepad1.dpad_right;
+        boolean bucketflap=gamepad1.dpad_down;
         if(gamepad2.left_bumper){
             auto = 0.9f;
         }
@@ -140,14 +151,14 @@ public class FloVal extends OpMode {
         if(gamepad1.right_bumper){
             left = -0.9f;
             right = 0.9f;
-        }
-        else{
+        } else{
             left = -gamepad1.left_stick_y;
             right = -gamepad1.right_stick_y;
         }
 
         if(gamepad1.a){
             in = !in;
+//            Thread.sleep(200);
         }
         float intakePow = (in) ? 0.9f : 0.0f;
         // clip the right/left values so that the values never exceed +/- 1
@@ -155,6 +166,23 @@ public class FloVal extends OpMode {
         left = Range.clip(left, -1, 1);
         intakePow = Range.clip(intakePow, -1, 1);
         auto = Range.clip(auto, 0, 1);
+        if(climb1) {
+            climber1.setPosition(1);
+        } else {
+            climber1.setPosition(0);
+        }
+        if(climb2) {
+            climber2.setPosition(1);
+        } else {
+            climber2.setPosition(0);
+        }
+        if(bucketflap) {
+            bucketflap1.setPosition(1);
+            bucketflap2.setPosition(0);
+        } else {
+            bucketflap1.setPosition(1);
+            bucketflap2.setPosition(0);
+        }
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
@@ -182,6 +210,7 @@ public class FloVal extends OpMode {
         telemetry.addData("Left Joystick", "left joy: " + String.format("%.2f", gamepad1.left_stick_y));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
         telemetry.addData("Right Joystick", "right joy: " + String.format("%.2f", gamepad1.right_stick_y));
+
 /*        telemetry.addData("azimuth", Math.round(Math.toDegrees(azimuth)));
 //        telemetry.addData("pitch", Math.round(Math.toDegrees(pitch)));
 //        telemetry.addData("roll", Math.round(Math.toDegrees(roll)));*/
