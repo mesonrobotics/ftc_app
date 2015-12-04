@@ -57,7 +57,7 @@ public class FloValleyAuto extends LinearOpMode {
     final int ULTRA_THRESH = 10;
     final double CLIMBER_POSITION = 0.9;
     final double REST_POSITION = 0.0;
-    double large_arc_inner = 0.83606;
+    double large_arc_inner = 0.83606/2;
     double large_arc_outer = 1.0;
     final int FULL_CCW_TURN_MS = 11720;
 

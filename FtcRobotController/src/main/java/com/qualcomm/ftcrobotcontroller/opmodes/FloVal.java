@@ -100,10 +100,10 @@ public class FloVal extends OpMode {
         intake = hardwareMap.dcMotor.get("intake");
         intake.setDirection((DcMotor.Direction.REVERSE));
         autoArm = hardwareMap.servo.get("autoArm");
-        climber1=hardwareMap.servo.get("left climber");
-        climber2=hardwareMap.servo.get("right climber");
-        bucketflap1=hardwareMap.servo.get("left bucket flap");
-        bucketflap2=hardwareMap.servo.get("right bucket flap");
+        climber1=hardwareMap.servo.get("left_climber");
+        climber2=hardwareMap.servo.get("right_climber");
+        bucketflap1=hardwareMap.servo.get("left_bucket");
+        bucketflap2=hardwareMap.servo.get("right_bucket");
 
 
         //mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -139,26 +139,26 @@ public class FloVal extends OpMode {
         // note that if y equal -1 then joystick is pushed all of the way forward.
         float left = -gamepad1.left_stick_y;
         float right = -gamepad1.right_stick_y;
-        boolean climb1=gamepad1.dpad_left;
-        boolean climb2=gamepad1.dpad_right;
-        boolean bucketflap=gamepad1.dpad_down;
-        if(gamepad2.left_bumper){
+        boolean climb1=gamepad2.dpad_left;
+        boolean climb2=gamepad2.dpad_right;
+        boolean bucketflap=gamepad2.dpad_down;
+        if(gamepad2.a){
             auto = 0.9f;
-        }
-        else if(gamepad2.right_bumper){
+        } else if(gamepad2.b){
             auto = 0.0f;
         }
         if(gamepad1.right_bumper){
             left = -0.9f;
             right = 0.9f;
-        } else{
+        } else {
             left = -gamepad1.left_stick_y;
             right = -gamepad1.right_stick_y;
         }
 
-        if(gamepad1.a){
-            in = !in;
-//            Thread.sleep(200);
+        if(gamepad1.right_trigger>0.5){
+            in = true;
+        } else if (gamepad1.left_trigger>0.5){
+            in = false;
         }
         float intakePow = (in) ? 0.9f : 0.0f;
         // clip the right/left values so that the values never exceed +/- 1
@@ -167,9 +167,9 @@ public class FloVal extends OpMode {
         intakePow = Range.clip(intakePow, -1, 1);
         auto = Range.clip(auto, 0, 1);
         if(climb1) {
-            climber1.setPosition(1);
-        } else {
             climber1.setPosition(0);
+        } else {
+            climber1.setPosition(1.0);
         }
         if(climb2) {
             climber2.setPosition(1);
